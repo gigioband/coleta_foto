@@ -1,0 +1,20 @@
+{
+  "name": "Planurbi Coleta Campo",
+  "short_name": "Planurbi",
+  "description": "Sistema de coleta de fotos em campo para imóveis",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#00362D",
+  "theme_color": "#00362D",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "lang": "pt-BR"
+}

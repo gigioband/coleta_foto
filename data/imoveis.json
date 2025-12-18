@@ -1,0 +1,203 @@
+[
+  {
+    "inscricao": "01.02.061.0037.001",
+    "bairro": "Recanto",
+    "quadra": "61",
+    "logradouro": "PROJETADA BM 109",
+    "tipo": "N/A",
+    "latitude": -35.88696667,
+    "longitude": -9.831876652,
+    "complemento": "2 A 2",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.040.0192.001",
+    "bairro": "Recanto",
+    "quadra": "40",
+    "logradouro": "PROJETADA A.1",
+    "tipo": "N/A",
+    "latitude": -35.88716869,
+    "longitude": -9.836589606,
+    "complemento": "1 C 6",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.040.0162.001",
+    "bairro": "Recanto",
+    "quadra": "40",
+    "logradouro": "PROJETADA A.1",
+    "tipo": "N/A",
+    "latitude": -35.88704292,
+    "longitude": -9.836418314,
+    "complemento": "1 C 6",
+    "situacao": "ESQUINA"
+  },
+  {
+    "inscricao": "01.02.012.0029.001",
+    "bairro": "Recanto",
+    "quadra": "12",
+    "logradouro": "LEONITA CAVALCANTI",
+    "tipo": "N/A",
+    "latitude": -35.88922066,
+    "longitude": -9.837566599,
+    "complemento": "622",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.011.0177.001",
+    "bairro": "Recanto",
+    "quadra": "11",
+    "logradouro": "LEONITA CAVALCANTI",
+    "tipo": "N/A",
+    "latitude": -35.88891876,
+    "longitude": -9.83783586,
+    "complemento": "613",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.011.0070.001",
+    "bairro": "Recanto",
+    "quadra": "11",
+    "logradouro": "EDSON FRAZAO",
+    "tipo": "N/A",
+    "latitude": -35.88885039,
+    "longitude": -9.838213927,
+    "complemento": "QD. \"6\" LOTE A , REMEMBRADOS DOS LOTES 05,13,14 E 15, LOT. MOEMA BASTOS",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.011.0042.001",
+    "bairro": "Recanto",
+    "quadra": "11",
+    "logradouro": "EDSON FRAZAO",
+    "tipo": "N/A",
+    "latitude": -35.8886861,
+    "longitude": -9.838013976,
+    "complemento": "REMEMBRAMENTO DE 03 (TRÊS) LOTES: LOTE 03,LOTE 04 E LOTE A",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.011.0028.001",
+    "bairro": "Recanto",
+    "quadra": "11",
+    "logradouro": "EDSON FRAZAO",
+    "tipo": "N/A",
+    "latitude": -35.88860151,
+    "longitude": -9.837908043,
+    "complemento": "62",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.007.0174.001",
+    "bairro": "PRAIA BONITA",
+    "quadra": "7.0",
+    "logradouro": "LEONITA CAVALCANTI",
+    "tipo": "Terreno",
+    "latitude": -35.88957778,
+    "longitude": -9.839041674,
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.007.0222.001",
+    "bairro": "PRAIA BONITA",
+    "quadra": "7.0",
+    "logradouro": "LEONITA CAVALCANTI",
+    "tipo": "Edificação",
+    "latitude": -35.88988054,
+    "longitude": -9.839358869,
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.004.0091.002",
+    "bairro": "PRAIA BONITA",
+    "quadra": "4.0",
+    "logradouro": "SENADOR RUI PALMEIRA",
+    "tipo": "Edificação",
+    "latitude": -35.89073665,
+    "longitude": -9.839870984,
+    "situacao": "ESQUINA"
+  },
+  {
+    "inscricao": "01.02.007.0047.001",
+    "bairro": "PRAIA BONITA",
+    "quadra": "7.0",
+    "logradouro": "SENADOR RUI PALMEIRA",
+    "tipo": "Edificação",
+    "latitude": -35.8905257,
+    "longitude": -9.840146342,
+    "situacao": "ESQUINA"
+  },
+  {
+    "inscricao": "01.02.001.0126.001",
+    "bairro": "PRAIA BONITA",
+    "quadra": "1.0",
+    "logradouro": "COMENDADOR TERCIO WANDERLEY",
+    "tipo": "Edificação",
+    "latitude": -35.89109704,
+    "longitude": -9.84047874,
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.001.0116.001",
+    "bairro": "PRAIA BONITA",
+    "quadra": "1.0",
+    "logradouro": "COMENDADOR TERCIO WANDERLEY",
+    "tipo": "Edificação",
+    "latitude": -35.89126962,
+    "longitude": -9.84030007,
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.001.0086.001",
+    "bairro": "PRAIA BONITA",
+    "quadra": "1.0",
+    "logradouro": "COMENDADOR TERCIO WANDERLEY",
+    "tipo": "Edificação",
+    "latitude": -35.8915057,
+    "longitude": -9.840058391,
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.001.0057.001",
+    "bairro": "PRAIA BONITA",
+    "quadra": "1.0",
+    "logradouro": "COMENDADOR TERCIO WANDERLEY",
+    "tipo": "Edificação",
+    "latitude": -35.89171357,
+    "longitude": -9.83984493,
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.202.0421.001",
+    "bairro": "ARQUIPÉLAGO DO SOL",
+    "quadra": "C1-202",
+    "logradouro": "AVENIDA C\t",
+    "tipo": "Edificação",
+    "latitude": -35.89517621,
+    "longitude": -9.834855967,
+    "complemento": "LOTE 36",
+    "situacao": "CONDOMÍNIO FECHADO"
+  },
+  {
+    "inscricao": "01.02.223.0090.001\t",
+    "bairro": "ARQUIPÉLAGO DO SOL",
+    "quadra": "B4 - 223",
+    "logradouro": "EM PROJETO B-3",
+    "tipo": "Edificação",
+    "latitude": -35.89084085,
+    "longitude": -9.835854389,
+    "complemento": "LOTE 6, Q B4-223",
+    "situacao": "CONDOMÍNIO FECHADO"
+  },
+  {
+    "inscricao": "01.02.221.0210.001",
+    "bairro": "ARQUIPÉLAGO DO SOL",
+    "quadra": "B1-221",
+    "logradouro": "nan",
+    "tipo": "Terreno",
+    "latitude": -35.89064406,
+    "longitude": -9.83486033,
+    "complemento": "QD. B-1 LOTE-09, LOT. ARQUIPELAGO DO SOL - CANARIAS",
+    "situacao": "CONDOMÍNIO FECHADO"
+  }
+]
