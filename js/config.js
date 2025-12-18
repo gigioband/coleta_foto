@@ -7,7 +7,7 @@
 const CONFIG = {
     // Google Drive API
     // Instruções de setup em: SETUP_GOOGLE_CLOUD.md
-    GOOGLE_CLIENT_ID: 'SEU_CLIENT_ID_AQUI.apps.googleusercontent.com',
+    GOOGLE_CLIENT_ID: '634169970002-3poa2g6damuf90o7aagr3tnmuq8sap2d.apps.googleusercontent.com',
     GOOGLE_API_KEY: 'SEU_API_KEY_AQUI', // Opcional
     GOOGLE_SCOPES: 'https://www.googleapis.com/auth/drive.file',
     
