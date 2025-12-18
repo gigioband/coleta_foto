@@ -15,7 +15,7 @@ const CONFIG = {
     // Crie uma pasta no Google Drive e copie o ID da URL
     // Exemplo: https://drive.google.com/drive/folders/1a2b3c4d5e6f7g8h9i0j
     // O ID é: 1a2b3c4d5e6f7g8h9i0j
-    DRIVE_FOLDER_ID: 'SEU_FOLDER_ID_AQUI',
+    DRIVE_FOLDER_ID: '1pwX_8x0-ud94loc2_DlcUxZhJsTAYGcq',
     
     // Configurações do App
     APP_NAME: 'Planurbi Coleta Campo',
