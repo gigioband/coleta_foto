@@ -2,9 +2,195 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Teste PLANURBI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Planurbi - Sistema de Coleta de Fotos em Campo">
+    <meta name="theme-color" content="#00362D">
+    <title>Planurbi - Coleta Campo</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Planurbi Coleta">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Google API -->
+    <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
-    <h1>Coleta de fotos PLANURBI</h1>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <img src="assets/logo.png" alt="Planurbi Logo" class="logo">
+                <h1 class="header-title">Coleta de Campo</h1>
+            </div>
+            <div class="header-status">
+                <span class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Carregando...</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Progress Bar -->
+            <div class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-header">
+                    <h2>Progresso da Coleta</h2>
+                    <span class="progress-count" id="progressCount">0/19</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <p class="progress-text" id="progressText">0% concluído</p>
+            </div>
+
+            <!-- Selection Section -->
+            <div class="selection-section" id="selectionSection">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📍 Selecione o Imóvel</h2>
+                    </div>
+                    
+                    <div class="card-body">
+                        <!-- Dropdown -->
+                        <div class="form-group">
+                            <label for="imovelSelect" class="form-label">Inscrição Imobiliária:</label>
+                            <select id="imovelSelect" class="form-select" onchange="selectImovel()">
+                                <option value="">Carregando imóveis...</option>
+                            </select>
+                        </div>
+
+                        <!-- Details -->
+                        <div id="imovelDetails" class="imovel-details" style="display: none;">
+                            <h3 class="details-title">📋 Detalhes do Imóvel</h3>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Bairro:</span>
+                                    <span class="detail-value" id="detailBairro">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Quadra:</span>
+                                    <span class="detail-value" id="detailQuadra">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Tipo:</span>
+                                    <span class="detail-value" id="detailTipo">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Logradouro:</span>
+                                    <span class="detail-value" id="detailLogradouro">-</span>
+                                </div>
+                            </div>
+
+                            <!-- GPS -->
+                            <div class="gps-section" id="gpsSection" style="display: none;">
+                                <h4 class="gps-title">📍 Localização GPS</h4>
+                                <div class="gps-info">
+                                    <div class="gps-item">
+                                        <span class="gps-label">Imóvel:</span>
+                                        <span class="gps-value" id="gpsImovel">-</span>
+                                    </div>
+                                    <div class="gps-item">
+                                        <span class="gps-label">Você está aqui:</span>
+                                        <span class="gps-value" id="gpsAtual">Capturando...</span>
+                                    </div>
+                                    <div class="gps-item">
+                                        <span class="gps-label">Distância:</span>
+                                        <span class="gps-value" id="gpsDistancia">Calculando...</span>
+                                    </div>
+                                </div>
+                                <button class="btn-secondary" onclick="openMaps()">
+                                    🗺️ Abrir no Google Maps
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Camera Section -->
+            <div class="camera-section" id="cameraSection" style="display: none;">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Video Preview -->
+                        <div class="camera-container" id="cameraContainer" style="display: none;">
+                            <video id="videoElement" class="camera-video" autoplay playsinline></video>
+                            <canvas id="canvasElement" style="display: none;"></canvas>
+                        </div>
+
+                        <!-- Photo Preview -->
+                        <div class="photo-preview" id="photoPreview" style="display: none;">
+                            <img id="photoImage" class="photo-image" alt="Foto capturada">
+                            <div class="photo-actions">
+                                <button class="btn-secondary" onclick="retakePhoto()">
+                                    🔄 Tirar Novamente
+                                </button>
+                                <button class="btn-primary" onclick="confirmPhoto()">
+                                    ✅ Confirmar e Enviar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Camera Button -->
+                        <div class="camera-actions" id="cameraActions">
+                            <button class="btn-camera" onclick="startCamera()" id="btnCamera">
+                                📷 FOTOGRAFAR
+                            </button>
+                            <button class="btn-capture" onclick="capturePhoto()" id="btnCapture" style="display: none;">
+                                📸 CAPTURAR
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Photos -->
+            <div class="recent-section" id="recentSection" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>✅ Fotos Coletadas Recentemente</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentList" class="recent-list">
+                            <p class="empty-state">Nenhuma foto coletada ainda</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Planurbi | Sistema de Coleta em Campo v1.0</p>
+            <p class="footer-status">
+                <span id="footerStatus">📶 Online</span> | 
+                <span id="footerAuth">🔐 Autenticando...</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p class="loading-text" id="loadingText">Carregando...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
