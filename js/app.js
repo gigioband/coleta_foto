@@ -67,7 +67,7 @@ function initTokenClient() {
         AppState.tokenClient = google.accounts.oauth2.initTokenClient({
             client_id: PLANURBI_CONFIG.GOOGLE_CLIENT_ID,
             scope: PLANURBI_CONFIG.GOOGLE_SCOPES,
-            callback: (response) => {
+            callback: async (response) => {
                 if (response.error) {
                     console.error('❌ Erro OAuth:', response);
                     showToast('❌ Erro na autenticação', 'error');
@@ -80,6 +80,20 @@ function initTokenClient() {
                 console.log('✅ Token obtido com sucesso');
                 updateAuthStatus('authenticated');
                 updateStatusIndicator('online');
+                
+                // RECARREGAR IMÓVEIS APÓS AUTENTICAR PARA FILTRAR OS JÁ FOTOGRAFADOS
+                if (AppState.imoveis.length > 0) {
+                    await checkExistingPhotos();
+                    AppState.imoveisFaltantes = AppState.imoveis.filter(im => 
+                        !AppState.coletados.includes(im.inscricao)
+                    );
+                    populateDropdown();
+                    updateProgress();
+                    
+                    const faltantes = AppState.imoveisFaltantes.length;
+                    const total = AppState.imoveis.length;
+                    showToast(`✅ Faltam ${faltantes} de ${total} imóveis`, 'info');
+                }
             },
         });
         
@@ -136,17 +150,24 @@ async function loadImoveis() {
         
         const data = await response.json();
         AppState.imoveis = data;
-        AppState.imoveisFaltantes = data.filter(im => 
-            !AppState.coletados.includes(im.inscricao)
-        );
         
         console.log('✅ Imóveis carregados:', AppState.imoveis.length);
+        
+        // VERIFICAR QUAIS JÁ FORAM FOTOGRAFADOS NO DRIVE
+        await checkExistingPhotos();
+        
+        AppState.imoveisFaltantes = AppState.imoveis.filter(im => 
+            !AppState.coletados.includes(im.inscricao)
+        );
         
         populateDropdown();
         updateProgress();
         
         hideLoading();
-        showToast(`✅ ${AppState.imoveis.length} imóveis carregados`, 'success');
+        
+        const faltantes = AppState.imoveisFaltantes.length;
+        const total = AppState.imoveis.length;
+        showToast(`✅ Faltam ${faltantes} de ${total} imóveis`, 'success');
         
     } catch (error) {
         console.error('❌ Erro ao carregar imóveis:', error);
@@ -155,20 +176,125 @@ async function loadImoveis() {
     }
 }
 
+// ===================================
+// VERIFICAR FOTOS JÁ EXISTENTES NO DRIVE
+// ===================================
+
+async function checkExistingPhotos() {
+    try {
+        console.log('🔍 Verificando fotos já existentes no Drive...');
+        
+        // Se não está autenticado, não consegue verificar
+        if (!AppState.isAuthenticated || !AppState.accessToken) {
+            console.log('⚠️ Não autenticado, pulando verificação');
+            return;
+        }
+        
+        // Listar arquivos na pasta do Drive
+        const query = `'${PLANURBI_CONFIG.DRIVE_FOLDER_ID}' in parents and trashed=false`;
+        const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name)&pageSize=1000`;
+        
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${AppState.accessToken}`
+            }
+        });
+        
+        if (!response.ok) {
+            console.warn('⚠️ Erro ao listar arquivos do Drive');
+            return;
+        }
+        
+        const result = await response.json();
+        const files = result.files || [];
+        
+        console.log(`✅ Encontrados ${files.length} arquivos no Drive`);
+        
+        // Extrair matrículas dos nomes dos arquivos
+        files.forEach(file => {
+            const fileName = file.name;
+            // Remove extensão .jpg e extrai matrícula ou inscrição
+            const fileNameWithoutExt = fileName.replace(/\.(jpg|jpeg|png)$/i, '');
+            
+            // Tentar encontrar imóvel por matrícula ou inscrição
+            const imovel = AppState.imoveis.find(im => 
+                im.matricula === fileNameWithoutExt || 
+                im.inscricao === fileNameWithoutExt
+            );
+            
+            if (imovel && !AppState.coletados.includes(imovel.inscricao)) {
+                AppState.coletados.push(imovel.inscricao);
+                console.log(`  ✅ Já fotografado: ${fileNameWithoutExt}`);
+            }
+        });
+        
+        console.log(`✅ Total de imóveis já coletados: ${AppState.coletados.length}`);
+        
+    } catch (error) {
+        console.warn('⚠️ Erro ao verificar fotos existentes:', error);
+        // Não bloqueia o app se der erro
+    }
+}
+
 function populateDropdown() {
     const select = document.getElementById('imovelSelect');
     
     select.innerHTML = '<option value="">Selecione um imóvel...</option>';
     
-    AppState.imoveisFaltantes.forEach(imovel => {
+    // ORDENAR POR QUADRA!
+    const imoveisOrdenados = AppState.imoveisFaltantes.sort((a, b) => {
+        return a.quadra.localeCompare(b.quadra);
+    });
+    
+    imoveisOrdenados.forEach(imovel => {
         const option = document.createElement('option');
         option.value = imovel.inscricao;
-        option.textContent = `${imovel.inscricao} - ${imovel.bairro}`;
+        // MOSTRAR SÓ MATRÍCULA!
+        option.textContent = imovel.matricula || imovel.inscricao;
         select.appendChild(option);
     });
     
     updateStatusIndicator('online');
 }
+
+// ===================================
+// ATUALIZAR LISTA DE IMÓVEIS
+// ===================================
+
+async function refreshImoveis() {
+    try {
+        showLoading('Atualizando lista...');
+        
+        if (!AppState.isAuthenticated || !AppState.accessToken) {
+            showToast('⚠️ Faça login primeiro para ver atualizações', 'warning');
+            hideLoading();
+            return;
+        }
+        
+        await checkExistingPhotos();
+        
+        AppState.imoveisFaltantes = AppState.imoveis.filter(im => 
+            !AppState.coletados.includes(im.inscricao)
+        );
+        
+        populateDropdown();
+        updateProgress();
+        
+        hideLoading();
+        
+        const faltantes = AppState.imoveisFaltantes.length;
+        const total = AppState.imoveis.length;
+        showToast(`✅ Atualizado! Faltam ${faltantes} de ${total}`, 'success');
+        
+    } catch (error) {
+        console.error('❌ Erro ao atualizar:', error);
+        hideLoading();
+        showToast('❌ Erro ao atualizar lista', 'error');
+    }
+}
+
+// Expor função globalmente para botão no HTML
+window.refreshImoveis = refreshImoveis;
 
 // ===================================
 // SELEÇÃO DE IMÓVEL
@@ -428,7 +554,8 @@ async function uploadToGoogleDrive() {
     try {
         showLoading('Enviando para Google Drive...');
         
-        const fileName = `${AppState.imovelAtual.inscricao}.jpg`;
+        // USAR MATRÍCULA NO NOME DO ARQUIVO!
+        const fileName = `${AppState.imovelAtual.matricula || AppState.imovelAtual.inscricao}.jpg`;
         
         const metadata = {
             name: fileName,
