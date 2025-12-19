@@ -199,5 +199,181 @@
     "longitude": -35.88696667,
     "complemento": "2 A 2",
     "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.100.0294.001",
+    "bairro": "BARRA MAR",
+    "quadra": "U6-100",
+    "logradouro": "DENISON FLORES CORRETOR",
+    "tipo": "Terreno",
+    "latitude": -9.818197389,
+    "longitude": -35.87834727,
+    "complemento": "2 U-6 L 02",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.099.0060.001",
+    "bairro": "BARRA MAR",
+    "quadra": "T6-99",
+    "logradouro": "DENISON FLORES CORRETOR",
+    "tipo": "Terreno",
+    "latitude": -9.818499228,
+    "longitude": -35.87821522,
+    "complemento": "02 QT-6 L 24",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.078.0021.001",
+    "bairro": "BARRA MAR",
+    "quadra": "F6-78",
+    "logradouro": "MOEMA ROCHA CAVALCANTE LOPES",
+    "tipo": "Terreno",
+    "latitude": -9.82114017,
+    "longitude": -35.87691683,
+    "complemento": "2 Q. F-6 L-1",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.074.0437.001",
+    "bairro": "BARRA MAR",
+    "quadra": "J6-074",
+    "logradouro": "MONS HIDELBRANDO GUIMARAES",
+    "tipo": "Terreno",
+    "latitude": -9.823052281,
+    "longitude": -35.87992798,
+    "complemento": "2 J6 4 LOT BARRA MAR",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.071.0446.001",
+    "bairro": "BARRA MAR",
+    "quadra": "M-71",
+    "logradouro": "MARGARIDA OITICICA LIMA",
+    "tipo": "Terreno",
+    "latitude": -9.822580981,
+    "longitude": -35.87997772,
+    "complemento": "2 M 24",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.071.0461.001",
+    "bairro": "BARRA MAR",
+    "quadra": "M-71",
+    "logradouro": "MARGARIDA OITICICA LIMA",
+    "tipo": "Terreno",
+    "latitude": -9.822190164,
+    "longitude": -35.87991636,
+    "complemento": "2 M 25",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.067.0443.001",
+    "bairro": "BARRA MAR",
+    "quadra": "H-67",
+    "logradouro": "DR CARLOS G DE BARROS",
+    "tipo": "Terreno",
+    "latitude": -9.82825206,
+    "longitude": -35.88162176,
+    "complemento": "LOTE 24",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.067.0060.001",
+    "bairro": "BARRA MAR",
+    "quadra": "H-67",
+    "logradouro": "BENEDITO BENTES",
+    "tipo": "Edificação",
+    "latitude": -9.828574598,
+    "longitude": -35.88212704,
+    "complemento": "LOTE 04",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.066.0110.001",
+    "bairro": "BARRA MAR",
+    "quadra": "G-66",
+    "logradouro": "ETELVINA G FERREIRA",
+    "tipo": "Terreno",
+    "latitude": -9.829296954,
+    "longitude": -35.88277308,
+    "complemento": "LOTE 05",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.065.0343.001",
+    "bairro": "BARRA MAR",
+    "quadra": "F-65",
+    "logradouro": "ETELVINA G FERREIRA",
+    "tipo": "Edificação",
+    "latitude": -9.829669855,
+    "longitude": -35.88281491,
+    "complemento": "LOTE 17",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.065.0348.001",
+    "bairro": "BARRA MAR",
+    "quadra": "F-65",
+    "logradouro": "ETELVINA G FERREIRA",
+    "tipo": "Edificação",
+    "latitude": -9.829701177,
+    "longitude": -35.88284379,
+    "complemento": "LOTE 17",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.065.0353.001",
+    "bairro": "BARRA MAR",
+    "quadra": "F-65",
+    "logradouro": "ETELVINA G FERREIRA",
+    "tipo": "Edificação",
+    "latitude": -9.829731365,
+    "longitude": -35.88287121,
+    "complemento": "LOTE 17",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.065.0358.001",
+    "bairro": "BARRA MAR",
+    "quadra": "F-65",
+    "logradouro": "ETELVINA G FERREIRA",
+    "tipo": "Edificação",
+    "latitude": -9.829764594,
+    "longitude": -35.88289838,
+    "complemento": "LOTE 17",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.065.0363.001",
+    "bairro": "BARRA MAR",
+    "quadra": "F-65",
+    "logradouro": "ETELVINA G FERREIRA",
+    "tipo": "Edificação",
+    "latitude": -9.829799196,
+    "longitude": -35.88293008,
+    "complemento": "LOTE 17",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.061.0037.001",
+    "bairro": "BARRA MAR",
+    "quadra": "A-61",
+    "logradouro": "PROJETADA BM 109",
+    "tipo": "Terreno",
+    "latitude": -9.831734173,
+    "longitude": -35.88685188,
+    "complemento": "LOTE 03",
+    "situacao": "MEIO DE QUADRA"
+  },
+  {
+    "inscricao": "01.02.198.0054.003",
+    "bairro": "BARRA MAR",
+    "quadra": "M1-198",
+    "logradouro": "PROJETADA BM 109",
+    "tipo": "Terreno",
+    "latitude": -9.831546441,
+    "longitude": -35.88697165,
+    "complemento": "LOTE 01",
+    "situacao": "MEIO DE QUADRA"
   }
 ]
