@@ -10,6 +10,7 @@ const AppState = {
     imovelAtual: null,
     coletados: [],
     userLocation: null,
+    capturedGPS: null, // GPS no momento da captura
     isAuthenticated: false,
     tokenClient: null,
     accessToken: null,
@@ -40,6 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Carregar dados salvos (localStorage)
     loadSavedData();
+    
+    // Atualizar contador de FILE_IDs salvos
+    const savedLinks = JSON.parse(localStorage.getItem('planurbi_file_ids') || '[]');
+    updateFileIdsCounter(savedLinks.length);
 });
 
 // ===================================
@@ -297,6 +302,232 @@ async function refreshImoveis() {
 window.refreshImoveis = refreshImoveis;
 
 // ===================================
+// SALVAR FILE_IDs (NOVO!)
+// ===================================
+
+function saveFileIdToLocalStorage(imovel, fileId) {
+    try {
+        // Carregar lista existente
+        const savedLinks = JSON.parse(localStorage.getItem('planurbi_file_ids') || '[]');
+        
+        // Gerar URLs
+        const urlView = `https://drive.google.com/file/d/${fileId}/view`;
+        const urlDownload = `https://drive.google.com/uc?id=${fileId}&export=download`;
+        const urlThumbnail = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+        
+        // Adicionar novo registro
+        const registro = {
+            matricula: imovel.matricula || '',
+            inscricao: imovel.inscricao,
+            bairro: imovel.bairro,
+            quadra: imovel.quadra || '',
+            logradouro: imovel.logradouro || '',
+            tipo: imovel.tipo || '',
+            
+            // GPS CADASTRAL
+            gps_cadastral: {
+                latitude: imovel.latitude,
+                longitude: imovel.longitude,
+                fonte: 'Cadastro Municipal'
+            },
+            
+            // GPS CAPTURADO (NOVO!)
+            gps_capturado: AppState.capturedGPS ? {
+                latitude: AppState.capturedGPS.latitude,
+                longitude: AppState.capturedGPS.longitude,
+                precisao_metros: AppState.capturedGPS.precisao_metros,
+                altitude: AppState.capturedGPS.altitude,
+                distancia_cadastral_metros: AppState.capturedGPS.distancia_cadastral_metros,
+                timestamp: AppState.capturedGPS.timestamp
+            } : null,
+            
+            // FOTO
+            file_id: fileId,
+            url_view: urlView,
+            url_download: urlDownload,
+            url_thumbnail: urlThumbnail,
+            
+            // TIMESTAMP GERAL
+            timestamp: new Date().toISOString()
+        };
+        
+        savedLinks.push(registro);
+        
+        // Salvar de volta
+        localStorage.setItem('planurbi_file_ids', JSON.stringify(savedLinks));
+        
+        console.log('💾 FILE_ID salvo:', fileId);
+        if (AppState.capturedGPS) {
+            console.log('📍 GPS salvo:', AppState.capturedGPS);
+        }
+        
+        // Limpar GPS capturado
+        AppState.capturedGPS = null;
+        
+        // Atualizar contador na UI
+        updateFileIdsCounter(savedLinks.length);
+        
+    } catch (error) {
+        console.error('❌ Erro ao salvar FILE_ID:', error);
+    }
+}
+
+function updateFileIdsCounter(count) {
+    // Atualizar contador de FILE_IDs salvos (se existir elemento na UI)
+    const counterElement = document.getElementById('fileIdsCounter');
+    if (counterElement) {
+        counterElement.textContent = `${count} link${count !== 1 ? 's' : ''} salvo${count !== 1 ? 's' : ''}`;
+    }
+}
+
+function exportFileIds() {
+    try {
+        const savedLinks = JSON.parse(localStorage.getItem('planurbi_file_ids') || '[]');
+        
+        if (savedLinks.length === 0) {
+            showToast('⚠️ Nenhum FILE_ID salvo ainda', 'warning');
+            return;
+        }
+        
+        // Criar objeto JSON para exportar
+        const exportData = {
+            data_coleta: new Date().toISOString(),
+            total_fotos: savedLinks.length,
+            bairro: savedLinks[0]?.bairro || 'ALTAVISTA',
+            fotos: savedLinks
+        };
+        
+        // Criar blob e download
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `planurbi_links_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showToast(`✅ ${savedLinks.length} links exportados!`, 'success');
+        
+    } catch (error) {
+        console.error('❌ Erro ao exportar:', error);
+        showToast('❌ Erro ao exportar links', 'error');
+    }
+}
+
+function clearFileIds() {
+    if (confirm('⚠️ Tem certeza que deseja limpar todos os FILE_IDs salvos?')) {
+        localStorage.removeItem('planurbi_file_ids');
+        updateFileIdsCounter(0);
+        showToast('✅ FILE_IDs limpos', 'success');
+    }
+}
+
+// Expor funções globalmente
+window.exportFileIds = exportFileIds;
+window.clearFileIds = clearFileIds;
+
+// ===================================
+// GPS CAPTURADO (NOVO!)
+// ===================================
+
+async function captureGPSLocation() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('GPS não suportado'));
+            return;
+        }
+        
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const gpsData = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    precisao_metros: Math.round(position.coords.accuracy),
+                    altitude: position.coords.altitude ? Math.round(position.coords.altitude) : null,
+                    timestamp: new Date(position.timestamp).toISOString()
+                };
+                
+                // Calcular distância do GPS cadastral
+                if (AppState.imovelAtual) {
+                    const distancia = calculateGPSDistance(
+                        gpsData.latitude,
+                        gpsData.longitude,
+                        AppState.imovelAtual.latitude,
+                        AppState.imovelAtual.longitude
+                    );
+                    gpsData.distancia_cadastral_metros = Math.round(distancia);
+                }
+                
+                resolve(gpsData);
+            },
+            (error) => {
+                reject(error);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    });
+}
+
+function calculateGPSDistance(lat1, lon1, lat2, lon2) {
+    // Fórmula de Haversine para calcular distância entre dois pontos GPS
+    const R = 6371e3; // Raio da Terra em metros
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+    
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    
+    return R * c; // Distância em metros
+}
+
+function showGPSInfo(gpsData) {
+    // Mostrar info GPS na UI (se elemento existir)
+    const gpsInfo = document.getElementById('gpsInfo');
+    if (!gpsInfo) return;
+    
+    let html = `
+        <div style="font-size: 12px; margin-top: 10px; padding: 10px; background: #e8f5e9; border-radius: 5px; border: 1px solid #4caf50;">
+            <strong>📍 GPS Capturado:</strong><br>
+            Lat: ${gpsData.latitude.toFixed(8)}<br>
+            Lng: ${gpsData.longitude.toFixed(8)}<br>
+            Precisão: ${gpsData.precisao_metros}m
+    `;
+    
+    if (gpsData.altitude) {
+        html += `<br>Altitude: ${gpsData.altitude}m`;
+    }
+    
+    if (gpsData.distancia_cadastral_metros !== undefined) {
+        const cor = gpsData.distancia_cadastral_metros > 50 ? 'red' : 
+                    gpsData.distancia_cadastral_metros > 20 ? 'orange' : 'green';
+        html += `<br>Dist. cadastral: <span style="color: ${cor}; font-weight: bold;">${gpsData.distancia_cadastral_metros}m</span>`;
+        
+        // Alertas
+        if (gpsData.distancia_cadastral_metros > 50) {
+            html += '<br><span style="color: red;">⚠️ Distância alta!</span>';
+        }
+    }
+    
+    if (gpsData.precisao_metros > 20) {
+        html += '<br><span style="color: orange;">⚠️ GPS impreciso</span>';
+    }
+    
+    html += '</div>';
+    gpsInfo.innerHTML = html;
+}
+
+// ===================================
 // SELEÇÃO DE IMÓVEL
 // ===================================
 
@@ -478,7 +709,7 @@ async function startCamera() {
     }
 }
 
-function capturePhoto() {
+async function capturePhoto() {
     const video = document.getElementById('videoElement');
     const canvas = document.getElementById('canvasElement');
     
@@ -487,6 +718,28 @@ function capturePhoto() {
     
     const context = canvas.getContext('2d');
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // CAPTURAR GPS NO MOMENTO DA FOTO (NOVO!)
+    showToast('📍 Capturando GPS...', 'info');
+    try {
+        const gpsData = await captureGPSLocation();
+        AppState.capturedGPS = gpsData;
+        console.log('✅ GPS capturado:', gpsData);
+        showGPSInfo(gpsData);
+        
+        // Alertas
+        if (gpsData.precisao_metros > 20) {
+            showToast('⚠️ GPS com baixa precisão!', 'warning');
+        }
+        if (gpsData.distancia_cadastral_metros > 50) {
+            showToast('⚠️ Distância alta do cadastral!', 'warning');
+        }
+        
+    } catch (error) {
+        console.error('❌ Erro ao capturar GPS:', error);
+        AppState.capturedGPS = null;
+        showToast('⚠️ GPS não capturado (continue assim mesmo)', 'warning');
+    }
     
     canvas.toBlob((blob) => {
         AppState.photoBlob = blob;
@@ -582,6 +835,11 @@ async function uploadToGoogleDrive() {
         
         const result = await response.json();
         console.log('✅ Upload concluído:', result);
+        
+        // ===================================
+        // SALVAR FILE_ID NO LOCALSTORAGE! (NOVO!)
+        // ===================================
+        saveFileIdToLocalStorage(AppState.imovelAtual, result.id);
         
         hideLoading();
         markAsCollected(AppState.imovelAtual.inscricao);
